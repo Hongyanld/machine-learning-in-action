@@ -3,15 +3,18 @@
 
 from numpy import *
 import operator
+import matplotlib
+import matplotlib.pyplot as plt 
+
 def createDataSet():
-    group = array ([[1.0,1.1],[1.0,1.0],[0,0],[0,0.1]])
-    labels = ['A','A','B','B']
-    return group, labels
+	group = array ([[1.0,1.1],[1.0,1.0],[0,0],[0,0.1]])
+	labels = ['A','A','B','B']
+	return group, labels
 
 
-    #group, labels = kNN.createDataSet() # how to define the group and print it?
+	#group, labels = kNN.createDataSet() # how to define the group and print it?
 
-    #print(group,labels)
+	#print(group,labels)
 
 
 def classify0(inX, dataSet, labels, k):
@@ -30,7 +33,7 @@ def classify0(inX, dataSet, labels, k):
 	sortedClassCount = sorted(classCount.items(), key=operator.itemgetter(1),reverse=True) #operator.itemgetter(1)获取对象的第1个域的值
 	return sortedClassCount[0][0] # 0raw 0 column
 
-# print(classify0([0,0],group,labels,3))
+    # print(classify0([0,0],group,labels,3))
 
 def file2matrix(filename):
 	fr = open(filename)
@@ -45,7 +48,20 @@ def file2matrix(filename):
 		returnMat[index,:] = listFromLine[0:3]
 		classLabelVector.append(int(listFromLine[-1]))
 		index += 1
-    return returnMat, classLabelVector
+	return  returnMat, classLabelVector
+
+
+def autoNorm(dataset):
+    minVals = dataset.min(0)
+    maxVals = dataset.max(0)
+    ranges = maxVals - minVals 
+    normDataSet = zeros(shape(dataset))
+    m = dataset.shape[0]
+    normDataSet = dataset - tile(minVals,(m,1))
+    normDataSet = normDataSet/tile(ranges,(m,1))
+    return  normDataSet, ranges, minVals
+
+
 
 
 
@@ -53,5 +69,18 @@ def file2matrix(filename):
 if __name__=="__main__":
  group,labels = createDataSet()
  print (classify0([0,0],group,labels,3))
+ # datingDataMat,datingLabels=kNN.file2matrix('datingTestSet2.txt')
+ # print (datingDataMat,datingLabels[0:20])
+ #
+ # fig = plt.figure()
+ # ax = fig.add_subplot(111)
+ # ax.scatter(datingDataMat[:1],datingDataMat[:2])
+ #ax.scatter(datingDataMat[:, 1], datingDataMat[:, 2], 15.0 * array(datingLabels), 15.0 * array(datingLabels))
+ # plt.show
+
+
+
+
+
 
 
